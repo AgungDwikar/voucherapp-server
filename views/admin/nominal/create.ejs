@@ -7,13 +7,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Kategory</h1>
+                    <h1>Nominal</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item">
-                            <a href="/category">Kategory</a>
+                            <a href="/nominal">Nominal</a>
                         </li>
                         <li class="breadcrumb-item active">Tambah</li>
                     </ol>
@@ -35,20 +35,47 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="/category/create" method="POST">
+                        <form action="/nominal/create" method="POST">
                             <div class="card-body">
                                 <div class="form-group">
+                                    <label>Maukan Nama koin</label>
+                                    <select
+                                        class="form-control select2"
+                                        style="width: 100%"
+                                        name="coinName"
+                                        required
+                                    >
+                                        <option selected="selected" disabled class=" bg-gray">
+                                            Pilih koin
+                                        </option>
+                                        <option value="Gold">Gold</option>
+                                        <option value="Diamond">Diamond</option>
+                                        <option value="Jewel">Jewel</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="name"
-                                        >Masukan Jenis Category</label
+                                        >Masukan jumlah koin</label
                                     >
                                     <input
-                                        name="name"
-                                        type="text"
+                                        name="coinQuantity"
+                                        type="number"
                                         class="form-control"
-                                        id="exampleInputEmail1"
-                                        placeholder="masukan nama Category"
+                                        id="coinQuantity"
+                                        placeholder="masukan jumlah koin"
                                     />
-                                
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Masukan price</label>
+                                    <input
+                                        name="coinPrice"
+                                        type="number"
+                                        class="form-control"
+                                        id="coinPrice"
+                                        placeholder="masukan price"
+                                    />
+                                </div>
                             </div>
                             <!-- /.card-body -->
 

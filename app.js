@@ -3,9 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var methodOverride = require('method-override');
+var session = require('express-session');
+var flash = require('connect-flash');
 
-var dashboardRouter = require('./app/dashboard/router');
-var cateRouter = require('./app/category/router');
+const dashboardRouter = require('./app/dashboard/router');
+const cateRouter = require('./app/category/router');
+const nominalRouter = require('./app/nominal/router');
 
 var app = express();
 
@@ -13,6 +17,16 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(
+    session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false },
+    })
+);
+app.use(flash());
+app.use(methodOverride('_method'));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +39,7 @@ app.use(
 
 app.use('/', dashboardRouter);
 app.use('/category', cateRouter);
+app.use('/nominal', nominalRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
