@@ -15,7 +15,7 @@
                         <li class="breadcrumb-item">
                             <a href="/nominal">Nominal</a>
                         </li>
-                        <li class="breadcrumb-item active">Tambah</li>
+                        <li class="breadcrumb-item active">Ubah</li>
                     </ol>
                 </div>
             </div>
@@ -31,11 +31,11 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Form Create Category</h3>
+                            <h3 class="card-title">Form Edit Nominal</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="/nominal/create" method="POST">
+                        <form action="/nominal/edit/<%= nominal._id %>?_method=PUT"" method="POST">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Maukan Nama koin</label>
@@ -43,6 +43,7 @@
                                         class="form-control select2"
                                         style="width: 100%"
                                         name="coinName"
+                                    
                                         required
                                     >
                                         <option
@@ -52,9 +53,21 @@
                                         >
                                             Pilih koin
                                         </option>
-                                        <option value="Gold">Gold</option>
-                                        <option value="Diamond">Diamond</option>
-                                        <option value="Jewel">Jewel</option>
+                                        <option value="Gold"
+                                        <% if (nominal.coinName === "Gold") { %>
+                                            selected
+                                        <% } %>
+                                        >Gold</option>
+                                        <option value="Diamond"
+                                        <% if (nominal.coinName === "Diamond") { %>
+                                            selected
+                                        <% } %>
+                                        >Diamond</option>
+                                        <option value="Jewel"
+                                        <% if (nominal.coinName === "Jewel") { %>
+                                            selected
+                                        <% } %>
+                                        >Jewel</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -67,6 +80,7 @@
                                         class="form-control"
                                         id="coinQuantity"
                                         placeholder="masukan jumlah koin"
+                                        value="<%= nominal.coinQuantity %>"
                                     />
                                 </div>
 
@@ -78,6 +92,7 @@
                                         class="form-control"
                                         id="price"
                                         placeholder="masukan price"
+                                        value="<%= nominal.price %>"
                                     />
                                 </div>
                             </div>

@@ -24,76 +24,76 @@ module.exports = {
             res.redirect('/nominal');
         }
     },
-    // actionCreate: async (req, res) => {
-    //     try {
-    //         const { name } = req.body;
+    actionCreate: async (req, res) => {
+        try {
+            const { coinName, coinQuantity, price } = req.body;
 
-    //         let category = await Category({ name });
-    //         await category.save();
+            let nominal = await Nominal({ coinName, coinQuantity, price });
+            await nominal.save();
 
-    //         req.flash('alertMessage', 'Berhasil tambah kategori');
-    //         req.flash('alertStatus', 'success');
+            req.flash('alertMessage', 'Berhasil tambah kategori');
+            req.flash('alertStatus', 'success');
 
-    //         res.redirect('/category');
-    //     } catch (err) {
-    //         req.flash('alertMessage', `${err.message}`);
-    //         req.flash('alertStatus', 'danger');
-    //         res.redirect('/category');
-    //     }
-    // },
-    // viewEdit: async (req, res) => {
-    //     try {
-    //         const { id } = req.params;
+            res.redirect('/nominal');
+        } catch (err) {
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/nominal');
+        }
+    },
+    viewEdit: async (req, res) => {
+        try {
+            const { id } = req.params;
 
-    //         const category = await Category.findOne({ _id: id });
+            const nominal = await Nominal.findOne({ _id: id });
 
-    //         res.render('admin/category/edit', {
-    //             category,
-    //         });
-    //     } catch (err) {
-    //         req.flash('alertMessage', `${err.message}`);
-    //         req.flash('alertStatus', 'danger');
-    //         res.redirect('/category');
-    //     }
-    // },
-    // actionEdit: async (req, res) => {
-    //     try {
-    //         const { id } = req.params;
-    //         const { name } = req.body;
+            res.render('admin/nominal/edit', {
+                nominal,
+            });
+        } catch (err) {
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/nominal');
+        }
+    },
+    actionEdit: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { coinName, coinQuantity, price } = req.body;
 
-    //         const category = await Category.findOneAndUpdate(
-    //             {
-    //                 _id: id,
-    //             },
-    //             { name }
-    //         );
+            await Nominal.findOneAndUpdate(
+                {
+                    _id: id,
+                },
+                { coinName, coinQuantity, price }
+            );
 
-    //         req.flash('alertMessage', 'Berhasil ubah kategori');
-    //         req.flash('alertStatus', 'success');
+            req.flash('alertMessage', 'Berhasil ubah kategori');
+            req.flash('alertStatus', 'success');
 
-    //         res.redirect('/category');
-    //     } catch (err) {
-    //         req.flash('alertMessage', `${err.message}`);
-    //         req.flash('alertStatus', 'danger');
-    //         res.redirect('/category');
-    //     }
-    // },
-    // actionDelete: async (req, res) => {
-    //     try {
-    //         const { id } = req.params;
+            res.redirect('/nominal');
+        } catch (err) {
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/nominal');
+        }
+    },
+    actionDelete: async (req, res) => {
+        try {
+            const { id } = req.params;
 
-    //         await Category.findOneAndRemove({
-    //             _id: id,
-    //         });
+            await Nominal.findOneAndRemove({
+                _id: id,
+            });
 
-    //         req.flash('alertMessage', 'Berhasil hapus kategori');
-    //         req.flash('alertStatus', 'success');
+            req.flash('alertMessage', 'Berhasil hapus kategori');
+            req.flash('alertStatus', 'success');
 
-    //         res.redirect('/category');
-    //     } catch (err) {
-    //         req.flash('alertMessage', `${err.message}`);
-    //         req.flash('alertStatus', 'danger');
-    //         res.redirect('/category');
-    //     }
-    // },
+            res.redirect('/nominal');
+        } catch (err) {
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/nominal');
+        }
+    },
 };
