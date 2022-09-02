@@ -1,4 +1,9 @@
 const Voucher = require('./model.js');
+const Category = require('../category/model.js');
+const Nominal = require('../nominal/model.js');
+const fs = require('fs');
+const path = require('path');
+const config = require('../../config');
 
 module.exports = {
     index: async (req, res) => {
@@ -15,32 +20,80 @@ module.exports = {
             res.redirect('/voucher');
         }
     },
-    // viewCreate: async (req, res) => {
-    //     try {
-    //         res.render('admin/nominal/create');
-    //     } catch (err) {
-    //         req.flash('alertMessage', `${err.message}`);
-    //         req.flash('alertStatus', 'danger');
-    //         res.redirect('/nominal');
-    //     }
-    // },
-    // actionCreate: async (req, res) => {
-    //     try {
-    //         const { coinName, coinQuantity, price } = req.body;
+    viewCreate: async (req, res) => {
+        try {
+            const category = await Category.find();
+            const nominal = await Nominal.find();
+            res.render('admin/voucher/create', { category, nominal });
+        } catch (err) {
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/voucher');
+        }
+    },
+    actionCreate: async (req, res) => {
+        try {
+            const { name, category, nominals } = req.body;
 
-    //         let nominal = await Nominal({ coinName, coinQuantity, price });
-    //         await nominal.save();
+            if (req.file) {
+                let tmp_path = req.file.path;
+                let originaExt =
+                    req.file.originalname.split('.')[
+                        req.file.originalname.split('.').length - 1
+                    ];
+                let filename = req.file.filename + '.' + originaExt;
+                let target_path = path.resolve(
+                    config.rootPath,
+                    `public/uploads/${filename}`
+                );
 
-    //         req.flash('alertMessage', 'Berhasil tambah kategori');
-    //         req.flash('alertStatus', 'success');
+                const src = fs.createReadStream(tmp_path);
+                const dest = fs.createWriteStream(target_path);
 
-    //         res.redirect('/nominal');
-    //     } catch (err) {
-    //         req.flash('alertMessage', `${err.message}`);
-    //         req.flash('alertStatus', 'danger');
-    //         res.redirect('/nominal');
-    //     }
-    // },
+                src.pipe(dest);
+
+                src.on('end', async () => {
+                    try {
+                        const voucher = new Voucher({
+                            name,
+                            category,
+                            nominals,
+                            thumbnail: filename,
+                        });
+
+                        await voucher.save();
+
+                        req.flash('alertMessage', 'Berhasil tambah voucher');
+                        req.flash('alertStatus', 'success');
+
+                        res.redirect('/voucher');
+                    } catch (err) {
+                        req.flash('alertMessage', `${err.message}`);
+                        req.flash('alertStatus', 'danger');
+                        res.redirect('/voucher');
+                    }
+                });
+            } else {
+                const voucher = new Voucher({
+                    name,
+                    category,
+                    nominals,
+                });
+
+                await voucher.save();
+
+                req.flash('alertMessage', 'Berhasil tambah voucher');
+                req.flash('alertStatus', 'success');
+
+                res.redirect('/voucher');
+            }
+        } catch (err) {
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/nominal');
+        }
+    },
+
     // viewEdit: async (req, res) => {
     //     try {
     //         const { id } = req.params;
